@@ -1,8 +1,7 @@
 'use client';
 
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import {
-  Avatar,
   Box,
   Divider,
   Drawer,
@@ -29,7 +28,7 @@ import {
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useSession, signOut } from 'next-auth/react';
-import { USER_ROLES } from 'lib/auth/roles';
+import { USER_ROLES } from '@/lib/auth/roles';
 
 interface SidebarLinkProps {
   href: string;
@@ -44,20 +43,9 @@ const SidebarLink = ({ href, icon, children, onClick }: SidebarLinkProps) => {
 
   return (
     <ListItem disablePadding sx={{ mb: 0.5 }}>
-      <ListItemButton
-        component={Link}
-        prefetch={true}
-        href={href}
-        onClick={onClick}
-        selected={isActive}
-        sx={{
-          borderRadius: 1,
-          py: 1,
-          px: 1.5,
-        }}
-      >
+      <ListItemButton component={Link} href={href} onClick={onClick} selected={isActive}>
         <ListItemIcon sx={{ minWidth: 36 }}>{icon}</ListItemIcon>
-        <ListItemText primary={children} sx={{ fontSize: 14, fontWeight: 500 }} />
+        <ListItemText primary={children} />
       </ListItemButton>
     </ListItem>
   );
@@ -74,11 +62,6 @@ const SidebarHeader = styled(Box)(({ theme }) => ({
 const SidebarContent = ({ onNavigate }: { onNavigate?: () => void }) => {
   const { data: session } = useSession();
 
-  const getProfileIcon = useCallback(() => {
-    const url = session?.user?.image ?? undefined;
-    return <Avatar src={url} alt="User Avatar" />;
-  }, [session]);
-
   const handleLogout = () => {
     signOut({ callbackUrl: '/' });
     onNavigate?.();
@@ -86,23 +69,18 @@ const SidebarContent = ({ onNavigate }: { onNavigate?: () => void }) => {
 
   return (
     <>
-      <SidebarHeader justifyContent="space-between">
-        <Typography variant="h5" fontWeight={600}>
+      <SidebarHeader>
+        <Typography variant="h6" fontWeight={600}>
           🐳 SeaNotes
         </Typography>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>{getProfileIcon()}</Box>
       </SidebarHeader>
 
-      <Box sx={{ p: 2, flex: 1, overflowY: 'auto' }}>
-        <List sx={{ p: 0 }}>
-          <SidebarLink href="/dashboard" icon={<Person fontSize="small" />} onClick={onNavigate}>
+      <Box sx={{ p: 2, flex: 1 }}>
+        <List>
+          <SidebarLink href="/dashboard" icon={<Person />}>
             Dashboard
           </SidebarLink>
-          <SidebarLink
-            href="/dashboard/my-notes"
-            icon={<Receipt fontSize="small" />}
-            onClick={onNavigate}
-          >
+          <SidebarLink href="/dashboard/my-notes" icon={<Receipt />}>
             My Notes
           </SidebarLink>
         </List>
@@ -111,31 +89,19 @@ const SidebarContent = ({ onNavigate }: { onNavigate?: () => void }) => {
       <Divider />
 
       <Box sx={{ p: 2 }}>
-        <List sx={{ p: 0 }}>
+        <List>
           {session?.user?.role === USER_ROLES.ADMIN && (
-            <SidebarLink
-              href="/admin/dashboard"
-              icon={<Assessment fontSize="small" />}
-              onClick={onNavigate}
-            >
+            <SidebarLink href="/admin/dashboard" icon={<Assessment />}>
               Admin Dashboard
             </SidebarLink>
           )}
-          <SidebarLink
-            href="/dashboard/account"
-            icon={<Settings fontSize="small" />}
-            onClick={onNavigate}
-          >
+          <SidebarLink href="/dashboard/account" icon={<Settings />}>
             Account Settings
           </SidebarLink>
-          <SidebarLink
-            href="/dashboard/subscription"
-            icon={<CreditCard fontSize="small" />}
-            onClick={onNavigate}
-          >
+          <SidebarLink href="/dashboard/subscription" icon={<CreditCard />}>
             Billing
           </SidebarLink>
-          <SidebarLink href="#" icon={<Logout fontSize="small" />} onClick={handleLogout}>
+          <SidebarLink href="#" icon={<Logout />} onClick={handleLogout}>
             Logout
           </SidebarLink>
         </List>
@@ -145,62 +111,31 @@ const SidebarContent = ({ onNavigate }: { onNavigate?: () => void }) => {
 };
 
 /**
- * Sidebar component that renders the navigation drawer for the application.
+ * Sidebar navigation drawer (desktop + mobile).
  */
 const Sidebar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const handleDrawerToggle = () => {
-    setMobileOpen((prev) => !prev);
-  };
-
   if (isMobile) {
     return (
       <>
-        {!mobileOpen && (
-          <IconButton
-            onClick={handleDrawerToggle}
-            sx={{ position: 'fixed', top: 16, left: 16, zIndex: 1300 }}
-          >
-            <MenuIcon />
-          </IconButton>
-        )}
-        <Drawer
-          variant="temporary"
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
-          ModalProps={{ keepMounted: true }}
-          sx={{
-            '& .MuiDrawer-paper': {
-              width: 256,
-              boxSizing: 'border-box',
-              borderRight: 1,
-              borderColor: 'divider',
-            },
-          }}
+        <IconButton
+          onClick={() => setMobileOpen(true)}
+          sx={{ position: 'fixed', top: 16, left: 16, zIndex: 1300 }}
         >
-          <SidebarContent onNavigate={handleDrawerToggle} />
+          <MenuIcon />
+        </IconButton>
+        <Drawer open={mobileOpen} onClose={() => setMobileOpen(false)}>
+          <SidebarContent onNavigate={() => setMobileOpen(false)} />
         </Drawer>
       </>
     );
   }
 
   return (
-    <Drawer
-      variant="permanent"
-      sx={{
-        width: 256,
-        flexShrink: 0,
-        '& .MuiDrawer-paper': {
-          width: 256,
-          boxSizing: 'border-box',
-          borderRight: 1,
-          borderColor: 'divider',
-        },
-      }}
-    >
+    <Drawer variant="permanent" sx={{ width: 256 }}>
       <SidebarContent />
     </Drawer>
   );

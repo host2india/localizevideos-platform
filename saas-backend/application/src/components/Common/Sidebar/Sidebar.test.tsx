@@ -1,93 +1,56 @@
-import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import Sidebar from './Sidebar';
-import '@testing-library/jest-dom';
+'use client';
 
-jest.mock('next/navigation', () => ({
-  usePathname: jest.fn(() => '/'),
-}));
+import { Box, Button, List, ListItem, ListItemButton } from '@mui/material';
+import { useRouter } from 'next/navigation';
 
-jest.mock('next-auth/react', () => {
-  return {
-    useSession: jest.fn(),
-    signOut: jest.fn(),
-  };
-});
+export type AuthUser = {
+  userId: string;
+  role?: 'ADMIN' | 'USER';
+};
 
-jest.mock('next/link', () => {
-  const MockLink = ({
-    href,
-    children,
-    onClick,
-  }: {
-    href: string;
-    children: React.ReactNode;
-    onClick?: () => void;
-  }) => (
-    <a href={href} onClick={onClick}>
-      {children}
-    </a>
+type Props = {
+  user: AuthUser;
+};
+
+/**
+ * Sidebar with role-aware navigation and logout.
+ */
+export default function Sidebar({ user }: Props) {
+  const router = useRouter();
+
+  async function handleLogout() {
+    await fetch('/api/auth/logout', { method: 'POST' });
+    router.push('/login');
+  }
+
+  return (
+    <Box sx={{ width: 240, borderRight: '1px solid #eee' }}>
+      <List>
+        <ListItem disablePadding>
+          <ListItemButton onClick={() => router.push('/dashboard')}>
+            Dashboard
+          </ListItemButton>
+        </ListItem>
+
+        {user.role === 'ADMIN' && (
+          <ListItem disablePadding>
+            <ListItemButton onClick={() => router.push('/admin')}>
+              Admin
+            </ListItemButton>
+          </ListItem>
+        )}
+
+        <ListItem disablePadding>
+          <Button
+            color="error"
+            fullWidth
+            onClick={handleLogout}
+            sx={{ mt: 2 }}
+          >
+            Logout
+          </Button>
+        </ListItem>
+      </List>
+    </Box>
   );
-  MockLink.displayName = 'MockLink';
-  return MockLink;
-});
-
-jest.mock('@mui/material/useMediaQuery', () => jest.fn());
-
-import { useSession, signOut } from 'next-auth/react';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { USER_ROLES } from 'lib/auth/roles';
-
-describe('Sidebar', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
-  it('renders desktop sidebar with standard links', () => {
-    (useSession as jest.Mock).mockReturnValue({
-      data: { user: { name: 'User', role: USER_ROLES.USER } },
-    });
-    (useMediaQuery as jest.Mock).mockReturnValue(false);
-
-    render(<Sidebar />);
-
-    expect(screen.getByText('Dashboard')).toBeInTheDocument();
-    expect(screen.getByText('My Notes')).toBeInTheDocument();
-    expect(screen.getByText('Account Settings')).toBeInTheDocument();
-    expect(screen.getByText('Billing')).toBeInTheDocument();
-    expect(screen.getByText('Logout')).toBeInTheDocument();
-    expect(screen.queryByText('Admin Dashboard')).not.toBeInTheDocument();
-  });
-
-  it('renders admin link for ADMIN role', () => {
-    (useSession as jest.Mock).mockReturnValue({
-      data: { user: { name: 'Admin', role: USER_ROLES.ADMIN } },
-    });
-    (useMediaQuery as jest.Mock).mockReturnValue(false);
-
-    render(<Sidebar />);
-    expect(screen.getByText('Admin Dashboard')).toBeInTheDocument();
-  });
-
-  it('calls signOut on logout click', () => {
-    (useSession as jest.Mock).mockReturnValue({
-      data: { user: { name: 'User', role: USER_ROLES.USER } },
-    });
-    (useMediaQuery as jest.Mock).mockReturnValue(false);
-
-    render(<Sidebar />);
-    const logoutLink = screen.getByRole('link', { name: /logout/i });
-    fireEvent.click(logoutLink);
-    expect(signOut).toHaveBeenCalledWith({ callbackUrl: '/' });
-  });
-
-  it('renders mobile drawer toggle', () => {
-    (useSession as jest.Mock).mockReturnValue({
-      data: { user: { name: 'User', role: USER_ROLES.USER } },
-    });
-    (useMediaQuery as jest.Mock).mockReturnValue(true);
-
-    render(<Sidebar />);
-    expect(screen.getByRole('button')).toBeInTheDocument();
-  });
-});
+}

@@ -1,22 +1,12 @@
-import React from 'react';
-import { Box } from '@mui/material';
-import HeroSection from 'components/Public/HeroSection/HeroSection';
-import ApplicationPreview from 'components/Public/ApplicationPreview/ApplicationPreview';
-import FeatureCards from 'components/Public/FeatureCards/FeatureCards';
-import CTASection from 'components/Public/CTASection/CTASection';
-
 /**
- * Home page component
+ * Public landing page
  */
-const Home = () => {
+export default function Page() {
   return (
-    <Box component="main">
-      <HeroSection />
-      <ApplicationPreview />
-      <FeatureCards />
-      <CTASection />
-    </Box>
+    <main style={{ padding: 32 }}>
+      <h1>Public Home OK ✅</h1>
+      <p>Minimal rebuild in progress.</p>
+    </main>
   );
-};
+}
 
-export default Home;

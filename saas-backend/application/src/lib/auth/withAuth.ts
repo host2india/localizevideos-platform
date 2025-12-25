@@ -1,38 +1,37 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from './options'
+import { NextRequest } from 'next/server';
+import jwt from 'jsonwebtoken';
 
-export interface AuthContext {
-  user: {
-    id: string
-    email: string
-    role: string
-  }
+export interface AuthUser {
+  userId: string;
+  role: 'ADMIN' | 'USER';
 }
 
+const JWT_SECRET = process.env.JWT_SECRET!;
+
 /**
- * Wraps an API route with authentication.
- * Injects authenticated user into handler context.
+ * Protects API routes using HttpOnly JWT cookie
  */
-export function withAuth<
-  T extends (
-    req: NextRequest,
-    ctx: AuthContext
-  ) => Promise<NextResponse>
->(handler: T) {
-  return async (req: NextRequest): Promise<NextResponse> => {
-    const session = await getServerSession(authOptions)
+export function withAuth(
+  handler: (req: NextRequest, user: AuthUser) => Promise<Response>,
+  options?: { roles?: Array<'ADMIN' | 'USER'> }
+) {
+  return async (req: NextRequest) => {
+    try {
+      const token = req.cookies.get('token')?.value;
 
-    if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-
-    return handler(req, {
-      user: {
-        id: session.user.id,
-        email: session.user.email ?? '',
-        role: session.user.role ?? 'USER'
+      if (!token) {
+        return new Response('Unauthorized', { status: 401 });
       }
-    })
-  }
+
+      const decoded = jwt.verify(token, JWT_SECRET) as AuthUser;
+
+      if (options?.roles && !options.roles.includes(decoded.role)) {
+        return new Response('Forbidden', { status: 403 });
+      }
+
+      return handler(req, decoded);
+    } catch {
+      return new Response('Unauthorized', { status: 401 });
+    }
+  };
 }

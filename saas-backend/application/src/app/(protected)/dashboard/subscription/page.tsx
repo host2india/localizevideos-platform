@@ -1,10 +1,15 @@
-import Subscription from 'components/Subscription/SubscriptionPage';
+/**
+ * Subscription dashboard page.
+ *
+ * This page depends on runtime-only data and must NOT be prerendered.
+ */
+export const dynamic = 'force-dynamic';
+
+import SubscriptionPageClient from './SubscriptionPageClient';
 
 /**
- * Main Subscription page protected by authentication.\
- *
- * @returns Page with subscription functionality and UI
+ * Subscription page entry.
  */
 export default function SubscriptionPage() {
-  return <Subscription />;
+  return <SubscriptionPageClient />;
 }

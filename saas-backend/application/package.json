@@ -17,7 +17,7 @@
     "deploy": "node ./setup/deploy.mjs"
   },
   "dependencies": {
-    "@auth/prisma-adapter": "^2.9.1",
+    "@auth/prisma-adapter": "^2.11.1",
     "@aws-sdk/client-s3": "^3.806.0",
     "@aws-sdk/s3-request-presigner": "^3.806.0",
     "@emotion/react": "^11.14.0",
@@ -30,7 +30,10 @@
     "@stripe/stripe-js": "^7.3.1",
     "@types/puppeteer": "^5.4.7",
     "axios": "^1.13.2",
+    "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.2",
+    "effect": "^3.19.13",
+    "jsonwebtoken": "^9.0.3",
     "next": "15.4.10",
     "next-auth": "^5.0.0-beta.28",
     "openai": "^5.9.0",
@@ -48,7 +51,9 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
+    "@types/bcrypt": "^6.0.0",
     "@types/jest": "^29.5.14",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
@@ -62,6 +67,6 @@
     "prettier": "^3.5.3",
     "prisma": "^6.19.1",
     "ts-node": "^10.9.2",
-    "typescript": "^5"
+    "typescript": "^5.9.3"
   }
 }

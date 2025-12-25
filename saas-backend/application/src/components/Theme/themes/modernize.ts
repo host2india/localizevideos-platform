@@ -1,3 +1,4 @@
+import type { Theme } from "@mui/material/styles"
 import { BaseThemeConfig } from '../ThemeRegistry';
 
 export const modernizeTheme: BaseThemeConfig = {
@@ -155,7 +156,7 @@ export const modernizeTheme: BaseThemeConfig = {
     },
     MuiTextField: {
       styleOverrides: {
-        root: ({ theme }) => ({
+        root: ({ theme }: { theme: Theme }) => ({
           '& .MuiOutlinedInput-root': {
             borderRadius: '7px',
             '& input': {

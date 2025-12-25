@@ -1,3 +1,4 @@
+import type { Theme } from "@mui/material/styles"
 import { BaseThemeConfig } from '../ThemeRegistry';
 
 export const skyTheme: BaseThemeConfig = {
@@ -199,7 +200,7 @@ export const skyTheme: BaseThemeConfig = {
     },
     MuiTextField: {
       styleOverrides: {
-        root: ({ theme }) => ({
+        root: ({ theme }: { theme: Theme }) => ({
           '& .MuiOutlinedInput-root': {
             borderRadius: '12px',
             backgroundColor: theme.palette.background.paper,

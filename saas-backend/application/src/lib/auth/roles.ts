@@ -1,8 +1,10 @@
-import { UserRole } from 'types';
-
+/**
+ * LEGACY COMPATIBILITY FILE
+ * TODO: Remove once old scaffold code is deleted
+ */
 export const USER_ROLES = {
   ADMIN: 'ADMIN',
   USER: 'USER',
 } as const;
 
-export const ALL_ROLES: UserRole[] = Object.values(USER_ROLES);
+export type UserRole = keyof typeof USER_ROLES;

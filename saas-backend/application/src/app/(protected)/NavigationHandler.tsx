@@ -1,18 +1,25 @@
 'use client';
 
-import { useNavigating } from 'hooks/navigation';
 import { useEffect } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 /**
- * Client component to handle navigation state.
- * Separated from the main layout to keep the layout as a server component.
+ * Handles client-side navigation protection for protected routes.
+ * Redirects unauthenticated users to login.
  */
 export default function NavigationHandler() {
-  const { setNavigating } = useNavigating();
+  const { data: session, status } = useSession();
+  const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
-    setNavigating(false);
-  }, [setNavigating]);
+    if (status === 'loading') return;
 
-  return null; // This component doesn't render anything
+    if (!session?.user) {
+      router.replace(`/login?next=${encodeURIComponent(pathname)}`);
+    }
+  }, [session, status, router, pathname]);
+
+  return null;
 }

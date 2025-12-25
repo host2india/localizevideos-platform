@@ -1,3 +1,4 @@
+import type { Theme } from "@mui/material/styles"
 import { BaseThemeConfig } from '../ThemeRegistry';
 
 export const defaultTheme: BaseThemeConfig = {
@@ -67,7 +68,7 @@ export const defaultTheme: BaseThemeConfig = {
     },
     MuiTextField: {
       styleOverrides: {
-        root: ({ theme }) => ({
+        root: ({ theme }: { theme: Theme }) => ({
           '& .MuiOutlinedInput-root': {
             '& input': {
               '&:-webkit-autofill, &:-webkit-autofill:hover, &:-webkit-autofill:focus': {

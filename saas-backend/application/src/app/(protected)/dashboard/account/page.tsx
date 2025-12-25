@@ -1,11 +1,16 @@
-'use client';
+/**
+ * Account settings dashboard page.
+ *
+ * This page depends on authenticated user data (JWT / cookies)
+ * and must be rendered dynamically at runtime.
+ */
+export const dynamic = 'force-dynamic';
 
-import AccountSettings from 'components/AccountSettings/AccountSettingsPage';
+import AccountSettingsPage from '@/components/AccountSettings/AccountSettingsPage';
 
 /**
- * User account settings page.
- * Renders the account settings component within the dashboard.
+ * Page component for the Account Settings dashboard route.
  */
-export default function AccountSettingsPage() {
-  return <AccountSettings />;
+export default function AccountPage() {
+  return <AccountSettingsPage />;
 }

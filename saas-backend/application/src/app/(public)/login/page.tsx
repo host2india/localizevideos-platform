@@ -1,12 +1,7 @@
-import LoginForm from 'components/Public/LoginForm/LoginForm';
-import React from 'react';
-
 /**
- * Public login page.
- * Render the login form with the corresponding layout.
+ * Public login page (placeholder).
+ * UI will be rebuilt later.
  */
-const LoginPage: React.FC = () => {
-  return <LoginForm />;
-};
-
-export default LoginPage;
+export default function LoginPage() {
+  return <h1>Login</h1>;
+}

@@ -1,12 +1,6 @@
-import ForgotPasswordForm from 'components/Public/ForgotPasswordForm/ForgotPasswordForm';
-import React from 'react';
-
 /**
- * Public forgot password page.
- * Render the forgot password form with the corresponding layout.
+ * Forgot password page (placeholder).
  */
-const LoginPage: React.FC = () => {
-  return <ForgotPasswordForm />;
-};
-
-export default LoginPage;
+export default function ForgotPasswordPage() {
+  return <h1>Forgot Password</h1>;
+}

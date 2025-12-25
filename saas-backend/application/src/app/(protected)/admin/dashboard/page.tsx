@@ -1,8 +1,18 @@
-import AdminDashboard from 'components/AdminDashboard/AdminDashboardPage';
+/**
+ * Admin dashboard page.
+ *
+ * This page is rendered dynamically because it depends
+ * on authenticated admin-only data.
+ */
+export const dynamic = 'force-dynamic';
+
+import AdminDashboardPageClient from './AdminDashboardPageClient';
 
 /**
- * Renders the admin dashboard page.
+ * Admin dashboard route entry.
+ *
+ * @returns JSX element for admin dashboard
  */
-export default async function DashboardPage() {
-  return <AdminDashboard />;
+export default function AdminDashboardPage() {
+  return <AdminDashboardPageClient />;
 }

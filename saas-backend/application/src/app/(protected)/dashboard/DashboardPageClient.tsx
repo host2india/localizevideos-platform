@@ -1,44 +1,66 @@
 'use client';
 
 import { Typography, Box, useTheme } from '@mui/material';
-import { useEffect, useState, useMemo } from 'react';
-import { StripeClient } from 'lib/api/stripe';
-import { SubscriptionPlanEnum } from 'types';
+import { useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
 
 /**
- * DashboardPageClient renders the dashboard UI and allows the user to send a test email to themselves.
- * @param userEmail - The email address of the logged-in user.
- * @param userName - The full name of the logged-in user.
+ * Temporary subscription plan enum.
+ * Will be replaced when Billing (Stripe) is implemented.
  */
-export default function DashboardPageClient({ userEmail, userName }: { userEmail: string; userName: string }) {
-  const [subscription, setSubscription] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
-  const stripeApi = useMemo(() => new StripeClient(), []);
+enum SubscriptionPlanEnum {
+  FREE = 'FREE',
+  PRO = 'PRO',
+}
+
+/**
+ * DashboardPageClient renders the dashboard UI.
+ *
+ * User data is fetched from the session at runtime.
+ * This avoids build-time and prerendering issues.
+ */
+export default function DashboardPageClient() {
+  const { data: session } = useSession();
   const theme = useTheme();
+
+  const userEmail = session?.user?.email ?? '';
+  const userName = session?.user?.name ?? '';
+
+  const [subscription, setSubscription] =
+    useState<SubscriptionPlanEnum | null>(null);
+  const [loading, setLoading] = useState(true);
+
   const subscriptionLabel = 'Your current subscription plan is: ';
-  
-  // Extract first name from full name, fallback to email if name is empty
+
+  // Extract first name from full name, fallback to email username
   const getDisplayName = () => {
     if (userName && userName.trim()) {
       return userName.trim().split(' ')[0];
     }
-    return userEmail.split('@')[0]; // Fallback to email username
+    if (userEmail) {
+      return userEmail.split('@')[0];
+    }
+    return 'User';
   };
 
   useEffect(() => {
+    /**
+     * TEMP: Simulated subscription fetch.
+     * Replace with Stripe API when Billing is implemented.
+     */
     const fetchSubscription = async () => {
       try {
-        const { subscription } = await stripeApi.getSubscription();
-        // Set to plan name if found, else null
-        setSubscription(subscription.length > 0 ? subscription[0].plan : null);
+        // Simulate FREE plan for now
+        setSubscription(SubscriptionPlanEnum.FREE);
       } catch {
         setSubscription(null);
       } finally {
         setLoading(false);
       }
     };
+
     fetchSubscription();
-  }, [stripeApi]);
+  }, []);
 
   return (
     <Box
@@ -48,7 +70,10 @@ export default function DashboardPageClient({ userEmail, userName }: { userEmail
       alignItems="center"
       minHeight="80vh"
     >
-      <Typography variant="h4">Welcome back, {getDisplayName()}!</Typography>
+      <Typography variant="h4">
+        Welcome back, {getDisplayName()}!
+      </Typography>
+
       <Typography variant="h5" mt={2}>
         {loading ? (
           'Loading subscription...'
@@ -80,19 +105,14 @@ export default function DashboardPageClient({ userEmail, userName }: { userEmail
                 background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
                 color: '#fff',
                 boxShadow: '0 2px 12px 0 rgba(31,162,255,0.15)',
-                border: 'none',
-                outline: 'none',
                 display: 'inline-block',
-                WebkitBackgroundClip: 'padding-box',
-                backgroundClip: 'padding-box',
-                transition: 'box-shadow 0.2s',
               }}
             >
               {subscription}
             </span>
           </>
         ) : (
-          'Your current subscription plan is: None'
+          `${subscriptionLabel} None`
         )}
       </Typography>
     </Box>

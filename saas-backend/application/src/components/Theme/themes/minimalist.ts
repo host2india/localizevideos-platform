@@ -1,3 +1,4 @@
+import type { Theme } from "@mui/material/styles"
 import { BaseThemeConfig } from '../ThemeRegistry';
 
 export const minimalistTheme: BaseThemeConfig = {
@@ -253,7 +254,7 @@ export const minimalistTheme: BaseThemeConfig = {
             opacity: 0.9,
           },
         }),
-        outlined: ({ theme }) => ({
+        outlined: ({ theme }: { theme: Theme }) => ({
           borderWidth: '1px',
           borderStyle: 'solid',
           borderColor: theme.palette.divider,
@@ -278,7 +279,7 @@ export const minimalistTheme: BaseThemeConfig = {
             color: theme.palette.text.primary,
           },
         }),
-        text: ({ theme }) => ({
+        text: ({ theme }: { theme: Theme }) => ({
           '&:hover': {
             backgroundColor: theme.palette.action?.hover,
           },
@@ -298,7 +299,7 @@ export const minimalistTheme: BaseThemeConfig = {
     // IconButton Components - Make icons grey for minimal look
     MuiIconButton: {
       styleOverrides: {
-        root: ({ theme }) => ({
+        root: ({ theme }: { theme: Theme }) => ({
           color: theme.palette.grey[500], // Use grey color for icons
           '&:hover': {
             backgroundColor: theme.palette.action?.hover,
@@ -310,7 +311,7 @@ export const minimalistTheme: BaseThemeConfig = {
     // Card Components
     MuiCard: {
       styleOverrides: {
-        root: ({ theme }) => ({
+        root: ({ theme }: { theme: Theme }) => ({
           borderRadius: '8px',
           border: `1px solid ${theme.palette.divider}`,
           boxShadow: 'none', // Remove shadows for minimalist approach
@@ -323,7 +324,7 @@ export const minimalistTheme: BaseThemeConfig = {
     }, // Input Components
     MuiTextField: {
       styleOverrides: {
-        root: ({ theme }) => ({
+        root: ({ theme }: { theme: Theme }) => ({
           '& .MuiOutlinedInput-root': {
             borderRadius: '4px', // More minimal border radius
             transition: 'border-color 0.2s ease-in-out',
@@ -358,7 +359,7 @@ export const minimalistTheme: BaseThemeConfig = {
     // InputAdornment Components - Make search icon grey
     MuiInputAdornment: {
       styleOverrides: {
-        root: ({ theme }) => ({
+        root: ({ theme }: { theme: Theme }) => ({
           color: theme.palette.grey[500], // Make search icon grey
         }),
       },
@@ -366,7 +367,7 @@ export const minimalistTheme: BaseThemeConfig = {
     // Chip Components
     MuiChip: {
       styleOverrides: {
-        root: ({ theme }) => ({
+        root: ({ theme }: { theme: Theme }) => ({
           borderRadius: '16px', // Pill shape for chips
           fontWeight: 500, // Slightly bolder for better visibility
           fontSize: '0.8125rem',
@@ -378,7 +379,7 @@ export const minimalistTheme: BaseThemeConfig = {
             backgroundColor: theme.palette.grey[200],
           },
         }),
-        colorPrimary: ({ theme }) => ({
+        colorPrimary: ({ theme }: { theme: Theme }) => ({
           backgroundColor: theme.palette.primary.main,
           color: theme.palette.primary.contrastText,
           border: 'none',
@@ -386,7 +387,7 @@ export const minimalistTheme: BaseThemeConfig = {
             backgroundColor: theme.palette.primary.dark,
           },
         }),
-        colorSuccess: ({ theme }) => ({
+        colorSuccess: ({ theme }: { theme: Theme }) => ({
           backgroundColor: theme.palette.success.main,
           color: theme.palette.success.contrastText,
           border: 'none',
@@ -398,7 +399,7 @@ export const minimalistTheme: BaseThemeConfig = {
     }, // Paper Components
     MuiPaper: {
       styleOverrides: {
-        root: ({ theme }) => ({
+        root: ({ theme }: { theme: Theme }) => ({
           borderRadius: '8px',
           border: `1px solid ${theme.palette.divider}`,
           boxShadow: 'none', // Remove all shadows for minimalist approach
@@ -417,7 +418,7 @@ export const minimalistTheme: BaseThemeConfig = {
     // Menu Components
     MuiMenu: {
       styleOverrides: {
-        paper: ({ theme }) => ({
+        paper: ({ theme }: { theme: Theme }) => ({
           borderRadius: '4px',
           border: `1px solid ${theme.palette.divider}`,
           boxShadow: 'none',
@@ -426,7 +427,7 @@ export const minimalistTheme: BaseThemeConfig = {
     }, // List Components
     MuiListItemButton: {
       styleOverrides: {
-        root: ({ theme }) => ({
+        root: ({ theme }: { theme: Theme }) => ({
           borderRadius: '4px',
           margin: '1px 0', // Minimal spacing
           padding: '8px 16px',
@@ -461,7 +462,7 @@ export const minimalistTheme: BaseThemeConfig = {
     // Switch Components
     MuiSwitch: {
       styleOverrides: {
-        root: ({ theme }) => ({
+        root: ({ theme }: { theme: Theme }) => ({
           '& .MuiSwitch-switchBase': {
             '&.Mui-checked': {
               '& + .MuiSwitch-track': {
@@ -480,7 +481,7 @@ export const minimalistTheme: BaseThemeConfig = {
     // AppBar Components
     MuiAppBar: {
       styleOverrides: {
-        root: ({ theme }) => ({
+        root: ({ theme }: { theme: Theme }) => ({
           backgroundColor: theme.palette.background.paper,
           color: theme.palette.text.primary,
           borderBottom: `1px solid ${theme.palette.divider}`,

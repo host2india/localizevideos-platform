@@ -1,10 +1,8 @@
-import { HTTP_STATUS } from 'lib/api/http';
 import { NextResponse } from 'next/server';
 
 /**
- * Handles GET requests for the health endpoint.
- * @returns {NextResponse} JSON response with status 'ok'.
+ * Health check endpoint
  */
-export const GET = () => {
-  return NextResponse.json({ status: 'ok' }, { status: HTTP_STATUS.OK });
+export const GET = async () => {
+  return NextResponse.json({ status: 'ok' });
 };
