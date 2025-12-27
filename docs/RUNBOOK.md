@@ -77,3 +77,24 @@ The application must always be running under PM2 as the `deploy` user.
 ### View status
 ```bash
 pm2 status
+
+“Known Issues / Non-Incidents”:
+### Next.js Server Action Warning (Benign)
+
+Error:
+Failed to find Server Action "x"
+
+Cause:
+Occurs when a client/browser triggers a Server Action from an older deployment
+after a new build has been deployed.
+
+Impact:
+- No security risk
+- No data loss
+- No authentication failure
+- User refresh resolves it
+
+Action:
+No action required.
+This is expected behavior in Next.js production deployments.
+
