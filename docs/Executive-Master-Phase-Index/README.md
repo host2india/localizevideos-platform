@@ -1,5 +1,6 @@
 📘 LocalizeVideos — Executive Master Phase Index
-Operating Doctrine: PHASE-01 → PHASE-100
+   Operating Doctrine: PHASE-01 → PHASE-100
+
 🧱 FOUNDATION & CORE DELIVERY (PHASE-01 → PHASE-07)
 
 Status: ✅ Implemented / Production-Proven
